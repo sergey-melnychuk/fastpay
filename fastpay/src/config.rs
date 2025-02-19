@@ -48,7 +48,7 @@ impl AuthorityServerConfig {
     }
 
     pub fn write(&self, path: &str) -> Result<(), std::io::Error> {
-        let file = OpenOptions::new().create(true).write(true).open(path)?;
+        let file = OpenOptions::new().create(true).append(true).open(path)?;
         let mut writer = BufWriter::new(file);
         let data = serde_json::to_string_pretty(self).unwrap();
         writer.write_all(data.as_ref())?;
@@ -72,7 +72,7 @@ impl CommitteeConfig {
     }
 
     pub fn write(&self, path: &str) -> Result<(), std::io::Error> {
-        let file = OpenOptions::new().create(true).write(true).open(path)?;
+        let file = OpenOptions::new().create(true).append(true).open(path)?;
         let mut writer = BufWriter::new(file);
         for config in &self.authorities {
             serde_json::to_writer(&mut writer, config)?;
@@ -168,7 +168,7 @@ impl AccountsConfig {
     pub fn read_or_create(path: &str) -> Result<Self, std::io::Error> {
         let file = OpenOptions::new()
             .create(true)
-            .write(true)
+            .append(true)
             .read(true)
             .open(path)?;
         let reader = BufReader::new(file);
@@ -197,7 +197,7 @@ pub struct InitialStateConfig {
 }
 
 impl InitialStateConfig {
-    pub fn read(path: &str) -> Result<Self, failure::Error> {
+    pub fn read(path: &str) -> Result<Self, anyhow::Error> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);
         let mut accounts = Vec::new();
@@ -205,7 +205,7 @@ impl InitialStateConfig {
             let line = line?;
             let elements = line.split(':').collect::<Vec<_>>();
             if elements.len() != 2 {
-                failure::bail!("expecting two columns separated with ':'")
+                anyhow::bail!("expecting two columns separated with ':'")
             }
             let address = decode_address(elements[0])?;
             let balance = elements[1].parse()?;
@@ -215,7 +215,7 @@ impl InitialStateConfig {
     }
 
     pub fn write(&self, path: &str) -> Result<(), std::io::Error> {
-        let file = OpenOptions::new().create(true).write(true).open(path)?;
+        let file = OpenOptions::new().create(true).append(true).open(path)?;
         let mut writer = BufWriter::new(file);
         for (address, balance) in &self.accounts {
             writeln!(writer, "{}:{}", encode_address(address), balance)?;

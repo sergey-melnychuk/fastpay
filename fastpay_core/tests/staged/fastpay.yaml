@@ -68,10 +68,7 @@ FastPayError:
           - current_balance:
               TYPENAME: Balance
     6:
-      PreviousTransferMustBeConfirmedFirst:
-        STRUCT:
-          - pending_confirmation:
-              TYPENAME: TransferOrder
+      PreviousTransferMustBeConfirmedFirst: UNIT
     7:
       ErrorWhileProcessingTransferOrder: UNIT
     8:

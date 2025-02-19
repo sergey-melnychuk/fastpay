@@ -1,7 +1,7 @@
 // Copyright (c) Facebook, Inc. and its affiliates.
 // SPDX-License-Identifier: Apache-2.0
 
-#![allow(clippy::blacklisted_name)]
+#![allow(clippy::disallowed_names)]
 
 use super::*;
 

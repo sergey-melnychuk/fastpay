@@ -3,9 +3,3 @@ members = [
         "fastpay_core",
         "fastpay",
 ]
-
-[profile.release]
-debug = true
-
-[profile.bench]
-debug = true

@@ -115,7 +115,7 @@ impl ClientServerBenchmark {
                 committee.clone(),
                 public_auth0,
                 secret_auth0.copy(),
-                i as u32,
+                i,
                 self.num_shards,
             );
             states.push(state);
@@ -198,7 +198,7 @@ impl ClientServerBenchmark {
         let items_number = orders.len() / 2;
         let time_start = Instant::now();
 
-        let max_in_flight = (self.max_in_flight / self.num_shards as usize) as usize;
+        let max_in_flight = self.max_in_flight / self.num_shards as usize;
         info!("Set max_in_flight per shard to {}", max_in_flight);
 
         info!("Sending requests.");

@@ -69,7 +69,7 @@ pub fn encode_address(key: &PublicKeyBytes) -> String {
     base64::encode(&key.0[..])
 }
 
-pub fn decode_address(s: &str) -> Result<PublicKeyBytes, failure::Error> {
+pub fn decode_address(s: &str) -> Result<PublicKeyBytes, anyhow::Error> {
     let value = base64::decode(s)?;
     let mut address = [0u8; dalek::PUBLIC_KEY_LENGTH];
     address.copy_from_slice(&value[..dalek::PUBLIC_KEY_LENGTH]);
@@ -100,7 +100,7 @@ impl Serialize for KeyPair {
     where
         S: serde::ser::Serializer,
     {
-        serializer.serialize_str(&base64::encode(&self.0.to_bytes()))
+        serializer.serialize_str(&base64::encode(self.0.to_bytes()))
     }
 }
 
@@ -119,7 +119,7 @@ impl<'de> Deserialize<'de> for KeyPair {
 
 impl std::fmt::Debug for Signature {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
-        let s = base64::encode(&self.0);
+        let s = base64::encode(self.0);
         write!(f, "{}", s)?;
         Ok(())
     }
@@ -127,7 +127,7 @@ impl std::fmt::Debug for Signature {
 
 impl std::fmt::Debug for PublicKeyBytes {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
-        let s = base64::encode(&self.0);
+        let s = base64::encode(self.0);
         write!(f, "{}", s)?;
         Ok(())
     }
@@ -161,7 +161,7 @@ impl Balance {
     }
 
     pub fn max() -> Self {
-        Balance(std::i128::MAX)
+        Balance(i128::MAX)
     }
 
     pub fn try_add(&self, other: Self) -> Result<Self, FastPayError> {

@@ -451,10 +451,7 @@ fn init_state_with_accounts<I: IntoIterator<Item = (FastPayAddress, Balance)>>(
 ) -> AuthorityState {
     let mut state = init_state();
     for (address, balance) in balances {
-        let account = state
-            .accounts
-            .entry(address)
-            .or_insert_with(AccountOffchainState::new);
+        let account = state.accounts.entry(address).or_default();
         account.balance = balance;
     }
     state
